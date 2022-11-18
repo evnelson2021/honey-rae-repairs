@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import "./Tickets.css"
 
 export const TicketList = () => {
     const [tickets, setTickets] = useState([])
     const [filteredTickets, setFiltered] = useState([])
     const [emergency, setEmergency] = useState(false)
+    const [openOnly, updateOpenOnly] = useState(false)
+    const navigate = useNavigate()
 
     const localHoneyUser = localStorage.getItem("honey_user")
     const honeyUserObject = JSON.parse(localHoneyUser)
@@ -48,6 +51,22 @@ export const TicketList = () => {
         },
         [tickets]
     )
+
+    useEffect(
+        ()=> {
+            if (openOnly){
+                const openTicketArray = tickets.filter(ticket => {
+                    return ticket.userId === honeyUserObject.id && ticket.dateCompleted === ""
+                })
+                setFiltered(openTicketArray)
+            }
+            else {
+                const myTickets = tickets.filter(ticket => ticket.userId === honeyUserObject.id)
+                setFiltered(myTickets)
+            }
+        },
+        [ openOnly ]
+    )
     return <>
         {
             honeyUserObject.staff
@@ -55,7 +74,10 @@ export const TicketList = () => {
                 <button onClick={() => { setEmergency(true)}} >Emergency Only</button>
                 <button onClick={() => { setEmergency(false)}} >Show All</button>
                 </>
-                : ""
+                :<> <button onClick={() => navigate("/ticket/create")}>Create Ticket</button>
+                    <button onClick={() => updateOpenOnly(true)}>Open Ticket</button>
+                    <button onClick={() => updateOpenOnly(false)}>All My Tickets</button>
+                </>
         }
         
         <h2>List of Tickets</h2>
@@ -75,4 +97,4 @@ export const TicketList = () => {
     </>
 }
 
-// code above on line 50-52 shows that the emeergency filter button will only show for users that are staff (honeyUserObject.staff)
+// code above on line 55-60 shows that the emeergency filter button will only show for users that are staff (honeyUserObject.staff) or will execute second instructions if they aren't staff which is the option for creating a ticket
