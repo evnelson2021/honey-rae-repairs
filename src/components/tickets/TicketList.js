@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import "./Tickets.css"
 
-export const TicketList = () => {
+export const TicketList = ({ searchTermState }) => {
     const [tickets, setTickets] = useState([])
     const [filteredTickets, setFiltered] = useState([])
     const [emergency, setEmergency] = useState(false)
@@ -11,6 +11,16 @@ export const TicketList = () => {
 
     const localHoneyUser = localStorage.getItem("honey_user")
     const honeyUserObject = JSON.parse(localHoneyUser)
+
+    useEffect(
+        () => {
+            const searchedTickets = tickets.filter(ticket => {
+                return ticket.description.toLowerCase().startsWith(searchTermState.toLowerCase())
+            })
+            setFiltered(searchedTickets)
+        },
+        [ searchTermState ]
+    )
     
     useEffect(
         () => {
@@ -87,8 +97,11 @@ export const TicketList = () => {
                 filteredTickets.map(
                     (ticket) => {
                         return <section className="ticket">
-                            <header>{ticket.description}</header>
-                            <footer>Emergency: {ticket.emergency ? "Yes" : "No"}</footer>
+                            <header>
+                                <Link to={`/tickets/${ticket.id}/edit`}>Ticket {ticket.id}</Link>
+                            </header>
+                            <section>{ticket.description}</section>
+                            <footer>Emergency: {ticket.emergency ? "🧨" : "No"}</footer>
                         </section>
                     }
                 )
@@ -97,4 +110,4 @@ export const TicketList = () => {
     </>
 }
 
-// code above on line 55-60 shows that the emeergency filter button will only show for users that are staff (honeyUserObject.staff) or will execute second instructions if they aren't staff which is the option for creating a ticket
+// code above on line 55-60 shows that the emergency filter button will only show for users that are staff (honeyUserObject.staff) or will execute second instructions if they aren't staff which is the option for creating a ticket
