@@ -13,17 +13,19 @@ export const TicketEdit = () => {
     const { ticketId } = useParams
     const navigate = useNavigate()
 
+    // TODO: Get the ticket state from the API.
     useEffect(() => {
-        fetch(`http://localhost:8088/serviceTickets/${ticketId}`)
-            .then(response => response.json())
-            .then((data) => {
+        fetch (`http://localhost:8088/serviceTickets/${ticketId}`)
+            .then (response => response.json())
+            .then ((data) => {
                 assignTicket(data)
             })
-    }, [ticketId])
+    }, [ ticketId ])
 
     const handleSaveButtonClick = (event) => {
         event.preventDefault()
 
+        // TODO: Write the fetch for the PUT request to replace the object being edited
         return fetch(`http://localhost:8088/serviceTickets/${ticket.id}`, {
             method: "PUT",
             headers: {
@@ -31,8 +33,8 @@ export const TicketEdit = () => {
             },
             body: JSON.stringify(ticket)
         })
-            .then(response => response.json())
-            .then(() => {
+        .then(response => response.json())
+            .then (() => { //after object has been saved in API,json server has responded, immediately direct user back to ticketList
                 navigate("/tickets")
             })
     }
@@ -53,9 +55,10 @@ export const TicketEdit = () => {
                     value={ticket.description}
                     onChange={
                         (evt) => {
-                            const copy = { ...ticket }
-                            copy.description = evt.target.value
-                            assignTicket(copy)
+                            // TODO: Update state with a modified copy
+                            const copy = {...ticket}
+                                copy.description = evt.target.value
+                                assignTicket(copy)
                         }
                     }>{ticket.description}</textarea>
             </div>
@@ -64,12 +67,12 @@ export const TicketEdit = () => {
             <div className="form-group">
                 <label htmlFor="name">Emergency:</label>
                 <input type="checkbox"
-                    checked={ticket.emergency}
                     onChange={
                         (evt) => {
-                            const copy = { ...ticket }
-                            copy.emergency = evt.target.checked
-                            assignTicket(copy)
+                            // TODO: Update state with a modified copy
+                            const copy = {...ticket}
+                                copy.emergency = evt.target.checked
+                                assignTicket(copy)
                         }
                     } />
             </div>

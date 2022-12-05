@@ -9,3 +9,24 @@
     padding: 0.7rem;
     margin: 0.5rem;
 }
+
+.ticket_finish{
+    margin-left: auto;
+}
+
+.ticket_delete{
+    margin-left: auto;
+    background-color: lightcoral;
+}
+
+.ticket_footer{
+    display:flex;
+    padding: 1rem 0 0 0;
+    border-top: 1px dashed darkmagenta;
+    margin: 1rem 0 0 0;
+}
+
+.ticket_header{
+    font-size: large;
+    padding: 0 0 1rem 0;
+}
